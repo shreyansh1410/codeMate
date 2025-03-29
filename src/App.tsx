@@ -1,13 +1,18 @@
-import "./App.css";
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import Testimonials from "./components/Testimonials";
+import Footer from "./components/Footer";
 
 function App() {
   return (
-    <>
-      <div className="text-6xl text-red-500 font-bold">Hello world</div>
-      <div className="card-actions justify-end">
-        <button className="btn btn-primary">Buy Now</button>
-      </div>
-    </>
+    <div className="min-h-screen bg-base-100">
+      <Navbar />
+      <main>
+        <Hero />
+        <Testimonials />
+      </main>
+      <Footer />
+    </div>
   );
 }
 
