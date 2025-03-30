@@ -2,18 +2,22 @@ import { ArrowRight, Sparkles } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="min-h-[90vh] flex items-center justify-center relative overflow-hidden">
+    <section className="min-h-[90vh] flex items-center justify-center relative overflow-hidden mt-20">
       <div className="absolute inset-0 spotlight" />
 
       <div className="content-container relative z-10">
         <div className="text-center max-w-3xl mx-auto">
           <div className="inline-flex mb-4">
             <p className="text-4xl font-medium text-primary animate-typing">
-              The <span className="font-['Instrument_Serif'] font-style: italic font-light">future</span>  of team building
+              The{" "}
+              <span className="font-['Instrument_Serif'] font-style: italic font-light">
+                future
+              </span>{" "}
+              of team building
             </p>
           </div>
 
-          <h1 className="text-8xl font-['Instrument_Serif'] mb-6 animate-gradient bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+          <h1 className="text-8xl font-['Instrument_Serif'] mb-6 animate-gradient bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent mix-blend-overlay">
             Connect with exceptional developers
           </h1>
 
