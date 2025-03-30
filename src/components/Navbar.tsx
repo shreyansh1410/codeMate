@@ -1,4 +1,4 @@
-import { Code2 } from "lucide-react";
+import logo from "/codemate_logo.png";
 
 const Navbar = () => {
   return (
@@ -8,16 +8,16 @@ const Navbar = () => {
           href="/"
           className="flex items-center gap-2 hover:text-primary transition-colors"
         >
-          <Code2 className="h-6 w-6" />
+          <img src={logo} alt="CodeMate" className="h-6 w-6" />
           <span className="font-medium">CodeMate</span>
         </a>
 
         <div className="flex items-center gap-4">
-          <a href="/signin" className="hover:text-primary transition-colors">
+          <a href="/login" className="hover:text-primary transition-colors">
             Sign in
           </a>
           <a
-            href="/signup"
+            href="/register"
             className="px-4 py-2 bg-primary text-primary-content rounded-lg hover:bg-primary/90 transition-colors"
           >
             Sign up free

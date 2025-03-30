@@ -4,7 +4,6 @@ const Footer = () => {
   return (
     <footer className="border-t border-white/10">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-  
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 pb-12">
           <div className="col-span-2">
             <div className="flex items-center space-x-2 mb-4">
@@ -104,17 +103,24 @@ const Footer = () => {
 
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <div className="text-sm text-base-content/60">
-            © 2025 CodeMate. All rights reserved.
+            © {new Date().getFullYear()} CodeMate. All rights reserved.
           </div>
 
           <div className="flex space-x-4">
-            <a className="p-2 rounded-full hover:bg-white/5 transition-colors">
-              <Twitter className="h-5 w-5 text-base-content/60 hover:text-primary" />
-            </a>
-            <a className="p-2 rounded-full hover:bg-white/5 transition-colors">
+            <a
+              href="https://github.com/shreyansh1410"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-full hover:bg-white/5 transition-colors"
+            >
               <Github className="h-5 w-5 text-base-content/60 hover:text-primary" />
             </a>
-            <a className="p-2 rounded-full hover:bg-white/5 transition-colors">
+            <a
+              href="https://www.linkedin.com/in/shreyansh1410/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-full hover:bg-white/5 transition-colors"
+            >
               <Linkedin className="h-5 w-5 text-base-content/60 hover:text-primary" />
             </a>
           </div>
