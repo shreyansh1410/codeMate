@@ -1,8 +1,15 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { setLoading, setError, setRequests } from "../store/connectionsSlice";
-import UserCard from "../components/Card";
+import { 
+  setLoading, 
+  setError, 
+  setRequests,
+  updateRequestStatus,
+  removeFromFeed
+} from "../store/connectionsSlice";
+import RequestCard from "../components/RequestCard";
+import { toast } from "react-hot-toast";
 
 export default function Requests() {
   const dispatch = useDispatch();
@@ -35,6 +42,48 @@ export default function Requests() {
     fetchRequests();
   }, [dispatch]);
 
+  const handleAccept = async (requestId: string) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/request/review/accepted/${requestId}`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to accept request");
+      }
+
+      dispatch(updateRequestStatus({ requestId, status: "accepted" }));
+      toast.success("Connection request accepted!");
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  const handleReject = async (requestId: string) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/request/review/rejected/${requestId}`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to reject request");
+      }
+
+      dispatch(updateRequestStatus({ requestId, status: "rejected" }));
+      toast.success("Connection request rejected");
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
+
   if (error) {
     return (
       <div className="min-h-screen pt-16 p-4">
@@ -63,13 +112,12 @@ export default function Requests() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {requests.map((user) => (
-              <UserCard
-                key={user._id}
-                user={user}
-                showActions={false}
-                onInterested={() => {}}
-                onIgnore={() => {}}
+            {requests.map((request) => (
+              <RequestCard
+                key={request._id}
+                user={request.fromUserId}
+                onAccept={() => handleAccept(request._id)}
+                onReject={() => handleReject(request._id)}
               />
             ))}
           </div>
@@ -77,4 +125,4 @@ export default function Requests() {
       </div>
     </div>
   );
-} 
+}

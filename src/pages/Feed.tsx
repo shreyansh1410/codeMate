@@ -9,18 +9,26 @@ import {
   setHasMore,
 } from "../store/feedSlice";
 import UserCard from "../components/Card"; // Import the UserCard component
+import { toast } from "react-hot-toast";
+import {
+  setFeedUsers,
+  removeFromFeed
+} from "../store/connectionsSlice";
 
 export default function Feed() {
   const dispatch = useDispatch();
   const { users, currentPage, hasMore, isLoading, error } = useSelector(
     (state: RootState) => state.feed
   );
+  const { feedUsers } = useSelector(
+    (state: RootState) => state.connections
+  );
 
   const fetchFeed = async (page: number) => {
     try {
       dispatch(setLoading(true));
       const response = await fetch(
-        `http://localhost:5000/api/user/feed`,
+        `${import.meta.env.VITE_API_URL}/user/feed`,
         {
           credentials: "include",
         }
@@ -45,14 +53,29 @@ export default function Feed() {
     }
   };
 
-  const handleInterested = (userId: string) => {
-    // TODO: Implement interest functionality
-    console.log("Interested in user:", userId);
+  const handleInterested = async (userId: string) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/request/send/${userId}`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to send connection request");
+      }
+
+      dispatch(removeFromFeed(userId));
+      toast.success("Connection request sent!");
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
   };
 
   const handleIgnore = (userId: string) => {
-    // TODO: Implement ignore functionality
-    console.log("Ignored user:", userId);
+    dispatch(removeFromFeed(userId));
   };
 
   useEffect(() => {
