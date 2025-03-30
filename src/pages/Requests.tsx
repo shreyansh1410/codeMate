@@ -15,7 +15,7 @@ export default function Requests() {
       try {
         dispatch(setLoading(true));
         const response = await fetch(
-          "http://localhost:5000/api/user/requests/received",
+          `${import.meta.env.VITE_API_URL}/user/requests/received`,
           {
             credentials: "include",
           }

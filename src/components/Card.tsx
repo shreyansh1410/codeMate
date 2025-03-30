@@ -15,18 +15,18 @@ interface UserCardProps {
   user: User;
   onInterested: (userId: string) => void;
   onIgnore: (userId: string) => void;
-  showActions?: boolean; // New prop to control action buttons visibility
+  showActions?: boolean;
 }
 
 const UserCard: React.FC<UserCardProps> = ({ 
   user, 
   onInterested, 
   onIgnore, 
-  showActions = true // Default to true to maintain backward compatibility
+  showActions = true 
 }) => {
   return (
     <div className="card bg-base-100 shadow-xl overflow-hidden h-96 relative group">
-      {/* Main image that takes up most of the card */}
+    
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-70 z-10"></div>
       
       <div className="h-full w-full">
@@ -37,7 +37,6 @@ const UserCard: React.FC<UserCardProps> = ({
         />
       </div>
       
-      {/* User info overlaid on the bottom of the image */}
       <div className="absolute bottom-0 left-0 right-0 p-4 text-white z-20">
         <div className="flex items-end justify-between">
           <div>
@@ -58,16 +57,15 @@ const UserCard: React.FC<UserCardProps> = ({
             )}
           </div>
           
-          <div className="flex gap-1 items-center">
+          {user.skills && <div className="flex gap-1 items-center">
             <span className="badge badge-sm">
               {user.skills.length} {user.skills.length === 1 ? 'skill' : 'skills'}
             </span>
-          </div>
+          </div>}
         </div>
         
-        {/* Skills section */}
         <div className="flex flex-wrap gap-1 mt-2 mb-2">
-          {user.skills.slice(0, 3).map((skill, index) => (
+          {user.skills?.slice(0, 3).map((skill, index) => (
             <span
               key={`${user._id}-${skill}-${index}`}
               className="badge badge-sm badge-primary"
@@ -75,13 +73,12 @@ const UserCard: React.FC<UserCardProps> = ({
               {skill}
             </span>
           ))}
-          {user.skills.length > 3 && (
+          {user.skills?.length > 3 && (
             <span className="badge badge-sm badge-ghost">+{user.skills.length - 3}</span>
           )}
         </div>
       </div>
       
-      {/* Action buttons - only show if showActions is true */}
       {showActions && (
         <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-6 p-4 transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-30 bg-gradient-to-t from-black/80 to-transparent pb-8 pt-12">
           <button
@@ -103,7 +100,6 @@ const UserCard: React.FC<UserCardProps> = ({
         </div>
       )}
       
-      {/* Skills tooltip on hover */}
       <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" className="btn btn-circle btn-sm btn-ghost bg-black/30 text-white">
@@ -115,7 +111,7 @@ const UserCard: React.FC<UserCardProps> = ({
             <div className="card-body">
               <h3 className="card-title text-sm">Skills</h3>
               <div className="flex flex-wrap gap-1">
-                {user.skills.map((skill, index) => (
+                {user.skills?.map((skill, index) => (
                   <span
                     key={`full-${user._id}-${skill}-${index}`}
                     className="badge badge-primary"

@@ -71,6 +71,13 @@ const Navbar = () => {
                   >
                     My connections
                   </Link>
+                  <Link
+                    to="/requests"
+                    className="block px-4 py-2 hover:bg-base-300 transition-colors"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    Received Requests
+                  </Link>
                   <button
                     onClick={() => {
                       handleLogout();
