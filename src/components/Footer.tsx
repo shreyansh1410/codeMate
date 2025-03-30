@@ -1,8 +1,8 @@
-import { Code2, Twitter, Github, Linkedin } from "lucide-react";
+import { Code2, Github, Linkedin } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="border-t border-white/10">
+    <footer className="border-t border-white/10 bottom-0 w-full">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 pb-12">
           <div className="col-span-2">
