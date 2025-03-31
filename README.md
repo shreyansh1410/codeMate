@@ -56,3 +56,4 @@
         - proxy_set_header X-Forwarded-Proto $scheme;
     - }
   - Restart nginx using `sudo systemctl restart nginx`
+  - Modify the Base URLs in the files to "/api"
