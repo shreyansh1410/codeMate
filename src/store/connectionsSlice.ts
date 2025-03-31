@@ -23,6 +23,10 @@ interface ConnectionsState {
   requests: ConnectionRequest[];
   isLoading: boolean;
   error: string | null;
+  connectionsPage: number;
+  connectionsHasMore: boolean;
+  requestsPage: number;
+  requestsHasMore: boolean;
 }
 
 const initialState: ConnectionsState = {
@@ -30,6 +34,10 @@ const initialState: ConnectionsState = {
   requests: [],
   isLoading: false,
   error: null,
+  connectionsPage: 1,
+  connectionsHasMore: true,
+  requestsPage: 1,
+  requestsHasMore: true,
 };
 
 const connectionsSlice = createSlice({
@@ -45,8 +53,14 @@ const connectionsSlice = createSlice({
     setConnections: (state, action: PayloadAction<RequestUser[]>) => {
       state.connections = action.payload;
     },
+    appendConnections: (state, action: PayloadAction<RequestUser[]>) => {
+      state.connections = [...state.connections, ...action.payload];
+    },
     setRequests: (state, action: PayloadAction<ConnectionRequest[]>) => {
       state.requests = action.payload;
+    },
+    appendRequests: (state, action: PayloadAction<ConnectionRequest[]>) => {
+      state.requests = [...state.requests, ...action.payload];
     },
     updateRequestStatus: (
       state,
@@ -57,14 +71,32 @@ const connectionsSlice = createSlice({
         request.status = action.payload.status;
       }
     },
+    setConnectionsPage: (state, action: PayloadAction<number>) => {
+      state.connectionsPage = action.payload;
+    },
+    setConnectionsHasMore: (state, action: PayloadAction<boolean>) => {
+      state.connectionsHasMore = action.payload;
+    },
+    setRequestsPage: (state, action: PayloadAction<number>) => {
+      state.requestsPage = action.payload;
+    },
+    setRequestsHasMore: (state, action: PayloadAction<boolean>) => {
+      state.requestsHasMore = action.payload;
+    },
   },
 });
 
 export const { 
   setLoading, 
   setError, 
-  setConnections, 
+  setConnections,
+  appendConnections,
   setRequests,
-  updateRequestStatus
+  appendRequests,
+  updateRequestStatus,
+  setConnectionsPage,
+  setConnectionsHasMore,
+  setRequestsPage,
+  setRequestsHasMore
 } = connectionsSlice.actions;
 export default connectionsSlice.reducer;

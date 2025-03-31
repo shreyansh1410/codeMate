@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import { Toaster } from "react-hot-toast";
@@ -14,6 +14,8 @@ import Hero from "./components/Hero";
 import Testimonials from "./components/Testimonials";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Body from "./components/Body";
+import { useSelector } from "react-redux";
+import { RootState } from "./store/store";
 
 function LandingPage() {
   return (
@@ -24,13 +26,25 @@ function LandingPage() {
   );
 }
 
+function HomeRoute() {
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  
+  // If user is authenticated, redirect to feed page
+  if (isAuthenticated) {
+    return <Navigate to="/feed" replace />;
+  }
+  
+  // Otherwise show landing page
+  return <LandingPage />;
+}
+
 function AppContent() {
   return (
     <div className="min-h-screen bg-base-100">
       <Navbar />
       <Routes>
         <Route element={<Body />}>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<HomeRoute />} />
           <Route path="/login" element={<SignIn />} />
           <Route path="/register" element={<SignUp />} />
           <Route

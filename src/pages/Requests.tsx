@@ -5,6 +5,9 @@ import {
   setLoading,
   setError,
   setRequests,
+  appendRequests,
+  setRequestsPage,
+  setRequestsHasMore
 } from "../store/connectionsSlice";
 import RequestCard from "../components/RequestCard";
 import { toast } from "react-hot-toast";
@@ -12,34 +15,54 @@ import axios from "axios";
 
 export default function Requests() {
   const dispatch = useDispatch();
-  const { requests, isLoading, error } = useSelector(
+  const { 
+    requests, 
+    isLoading, 
+    error, 
+    requestsPage, 
+    requestsHasMore 
+  } = useSelector(
     (state: RootState) => state.connections
   );
 
-  useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        dispatch(setLoading(true));
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/user/requests/received`,
-          { withCredentials: true }
-        );
+  const fetchRequests = async (page: number) => {
+    try {
+      dispatch(setLoading(true));
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/user/requests/received?page=${page}&limit=9`,
+        { withCredentials: true }
+      );
 
-        if (!response.data.success) {
-          throw new Error("Failed to fetch requests");
-        }
-
-        dispatch(setRequests(response.data.data));
-      } catch (error: any) {
-        dispatch(
-          setError(error.response?.data?.message || "Failed to fetch requests")
-        );
-      } finally {
-        dispatch(setLoading(false));
+      if (!response.data.success) {
+        throw new Error("Failed to fetch requests");
       }
-    };
 
-    fetchRequests();
+      if (page === 1) {
+        dispatch(setRequests(response.data.data));
+      } else {
+        dispatch(appendRequests(response.data.data));
+      }
+
+      // Check if there are more requests to load
+      dispatch(setRequestsHasMore(response.data.data.length === 9));
+      dispatch(setRequestsPage(page));
+    } catch (error: any) {
+      dispatch(
+        setError(error.response?.data?.message || "Failed to fetch requests")
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  const handleLoadMore = () => {
+    if (!isLoading && requestsHasMore) {
+      fetchRequests(requestsPage + 1);
+    }
+  };
+
+  useEffect(() => {
+    fetchRequests(1);
   }, [dispatch]);
 
   const handleAccept = async (requestId: string) => {
@@ -89,11 +112,7 @@ export default function Requests() {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">Connection Requests</h1>
 
-        {isLoading ? (
-          <div className="flex justify-center">
-            <div className="loading loading-spinner loading-lg"></div>
-          </div>
-        ) : requests.length === 0 ? (
+        {requests.length === 0 && !isLoading ? (
           <div className="text-center py-12">
             <h2 className="text-xl font-semibold mb-2">No Pending Requests</h2>
             <p className="text-base-content/70">
@@ -110,6 +129,20 @@ export default function Requests() {
                 onReject={() => handleReject(request._id)}
               />
             ))}
+          </div>
+        )}
+
+        {isLoading && (
+          <div className="flex justify-center my-12">
+            <div className="loading loading-spinner loading-lg"></div>
+          </div>
+        )}
+
+        {!isLoading && requestsHasMore && requests.length > 0 && (
+          <div className="text-center mt-8">
+            <button className="btn btn-primary" onClick={handleLoadMore}>
+              Load More
+            </button>
           </div>
         )}
       </div>

@@ -7,6 +7,7 @@ import {
   setUsers,
   setCurrentPage,
   setHasMore,
+  moveToNextUser,
 } from "../store/feedSlice";
 import UserCard from "../components/Card";
 import { toast } from "react-hot-toast";
@@ -14,7 +15,7 @@ import axios from "axios";
 
 export default function Feed() {
   const dispatch = useDispatch();
-  const { users, currentPage, hasMore, isLoading, error } = useSelector(
+  const { users, currentUser, isLoading, error } = useSelector(
     (state: RootState) => state.feed
   );
 
@@ -41,12 +42,6 @@ export default function Feed() {
     }
   };
 
-  const handleLoadMore = () => {
-    if (!isLoading && hasMore) {
-      fetchFeed(currentPage + 1);
-    }
-  };
-
   const handleInterested = async (userId: string) => {
     try {
       await axios.post(
@@ -54,9 +49,7 @@ export default function Feed() {
         {},
         { withCredentials: true }
       );
-
-      // Remove user from the feed immediately
-      dispatch(setUsers(users.filter(user => user._id !== userId)));
+      dispatch(moveToNextUser());
       toast.success("Connection request sent!");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to send connection request");
@@ -71,8 +64,7 @@ export default function Feed() {
         { withCredentials: true }
       );
 
-      // Remove user from the feed immediately
-      dispatch(setUsers(users.filter(user => user._id !== userId)));
+      dispatch(moveToNextUser());
       toast.success("User ignored");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to ignore user");
@@ -99,7 +91,7 @@ export default function Feed() {
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold">Find Your CodeMate</h1>
           
-          <div className="dropdown dropdown-end">
+          {/* <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-circle btn-ghost">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -110,21 +102,40 @@ export default function Feed() {
               <li><a>Sort by Most Recent</a></li>
               <li><a>Reset Filters</a></li>
             </ul>
-          </div>
+          </div> */}
         </div>
         
-        {users.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {users.map((user) => (
-              <UserCard
-                key={user._id}
-                user={user}
-                onInterested={() => handleInterested(user._id)}
-                onIgnore={() => handleIgnore(user._id)}
-              />
-            ))}
+        {isLoading ? (
+          <div className="flex justify-center my-12">
+            <div className="loading loading-spinner loading-lg"></div>
           </div>
-        ) : !isLoading ? (
+        ) : currentUser ? (
+          <div className="flex justify-center">
+            <div className="w-full max-w-md">
+              <UserCard
+                key={currentUser._id}
+                user={currentUser}
+                onInterested={() => handleInterested(currentUser._id)}
+                onIgnore={() => handleIgnore(currentUser._id)}
+              />
+            </div>
+          </div>
+        ) : users.length > 0 ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="bg-base-100 rounded-lg shadow-xl p-8 text-center max-w-md">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <h3 className="text-xl font-bold mt-4">All Caught Up!</h3>
+              <p className="text-base-content/60 mt-2">
+                You've gone through all potential CodeMates for now. Check back later for new matches!
+              </p>
+              <button className="btn btn-primary mt-4" onClick={() => fetchFeed(1)}>
+                Refresh
+              </button>
+            </div>
+          </div>
+        ) : (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="bg-base-100 rounded-lg shadow-xl p-8 text-center max-w-md">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-base-content/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -138,20 +149,6 @@ export default function Feed() {
                 Refresh
               </button>
             </div>
-          </div>
-        ) : null}
-
-        {isLoading && (
-          <div className="flex justify-center my-12">
-            <div className="loading loading-spinner loading-lg"></div>
-          </div>
-        )}
-
-        {!isLoading && hasMore && (
-          <div className="text-center mt-8">
-            <button className="btn btn-primary" onClick={handleLoadMore}>
-              Load More
-            </button>
           </div>
         )}
       </div>

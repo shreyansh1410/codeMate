@@ -1,35 +1,68 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { setLoading, setError, setConnections } from "../store/connectionsSlice";
+import { 
+  setLoading, 
+  setError, 
+  setConnections, 
+  appendConnections,
+  setConnectionsPage,
+  setConnectionsHasMore
+} from "../store/connectionsSlice";
 import UserCard from "../components/Card";
 
 export default function Connections() {
   const dispatch = useDispatch();
-  const { connections, isLoading, error } = useSelector(
+  const { 
+    connections, 
+    isLoading, 
+    error, 
+    connectionsPage, 
+    connectionsHasMore 
+  } = useSelector(
     (state: RootState) => state.connections
   );
 
-  useEffect(() => {
-    const fetchConnections = async () => {
-      try {
-        dispatch(setLoading(true));
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/user/connections`, {
+  const fetchConnections = async (page: number) => {
+    try {
+      dispatch(setLoading(true));
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/user/connections?page=${page}&limit=9`, 
+        {
           credentials: "include",
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch connections");
         }
-        const data = await response.json();
-        dispatch(setConnections(data.data));
-      } catch (error) {
-        dispatch(setError((error as Error).message));
-      } finally {
-        dispatch(setLoading(false));
+      );
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch connections");
       }
-    };
+      
+      const data = await response.json();
+      
+      if (page === 1) {
+        dispatch(setConnections(data.data));
+      } else {
+        dispatch(appendConnections(data.data));
+      }
+      
+      // Check if there are more connections to load
+      dispatch(setConnectionsHasMore(data.data.length === 9));
+      dispatch(setConnectionsPage(page));
+    } catch (error) {
+      dispatch(setError((error as Error).message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
 
-    fetchConnections();
+  const handleLoadMore = () => {
+    if (!isLoading && connectionsHasMore) {
+      fetchConnections(connectionsPage + 1);
+    }
+  };
+
+  useEffect(() => {
+    fetchConnections(1);
   }, [dispatch]);
 
   if (error) {
@@ -47,11 +80,7 @@ export default function Connections() {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">Your Connections</h1>
 
-        {isLoading ? (
-          <div className="flex justify-center">
-            <div className="loading loading-spinner loading-lg"></div>
-          </div>
-        ) : connections.length === 0 ? (
+        {connections.length === 0 && !isLoading ? (
           <div className="text-center py-12">
             <h2 className="text-xl font-semibold mb-2">No Connections Yet</h2>
             <p className="text-base-content/70">
@@ -69,6 +98,20 @@ export default function Connections() {
                 onIgnore={() => {}}
               />
             ))}
+          </div>
+        )}
+
+        {isLoading && (
+          <div className="flex justify-center my-12">
+            <div className="loading loading-spinner loading-lg"></div>
+          </div>
+        )}
+
+        {!isLoading && connectionsHasMore && connections.length > 0 && (
+          <div className="text-center mt-8">
+            <button className="btn btn-primary" onClick={handleLoadMore}>
+              Load More
+            </button>
           </div>
         )}
       </div>
