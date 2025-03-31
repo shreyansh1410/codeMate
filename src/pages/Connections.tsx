@@ -14,7 +14,7 @@ export default function Connections() {
     const fetchConnections = async () => {
       try {
         dispatch(setLoading(true));
-        const response = await fetch("http://localhost:5000/api/user/connections", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/user/connections`, {
           credentials: "include",
         });
         if (!response.ok) {

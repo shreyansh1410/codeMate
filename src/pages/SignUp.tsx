@@ -48,7 +48,7 @@ export default function SignUp() {
       };
 
       await register(userData);
-      navigate("/signin");
+      navigate("/login");
     } catch (error) {
       dispatch(setError((error as Error).message));
     } finally {
@@ -166,7 +166,8 @@ export default function SignUp() {
                 <option value="">Select gender (optional)</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="others">Others</option>
+                <option value="prefer not to say">Prefer Not To Say</option>
               </select>
             </div>
 

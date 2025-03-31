@@ -258,7 +258,8 @@ export default function Profile() {
                         <option value="">Select Gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
-                        <option value="other">Other</option>
+                        <option value="others">Others</option>
+                        <option value="prefer not to say">Prefer Not To Say</option>
                       </select>
                     </div>
                   </div>

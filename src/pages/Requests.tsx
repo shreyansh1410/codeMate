@@ -1,15 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { 
-  setLoading, 
-  setError, 
+import {
+  setLoading,
+  setError,
   setRequests,
-  updateRequestStatus,
-  removeFromFeed
 } from "../store/connectionsSlice";
 import RequestCard from "../components/RequestCard";
 import { toast } from "react-hot-toast";
+import axios from "axios";
 
 export default function Requests() {
   const dispatch = useDispatch();
@@ -21,19 +20,20 @@ export default function Requests() {
     const fetchRequests = async () => {
       try {
         dispatch(setLoading(true));
-        const response = await fetch(
+        const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/user/requests/received`,
-          {
-            credentials: "include",
-          }
+          { withCredentials: true }
         );
-        if (!response.ok) {
+
+        if (!response.data.success) {
           throw new Error("Failed to fetch requests");
         }
-        const data = await response.json();
-        dispatch(setRequests(data.data));
-      } catch (error) {
-        dispatch(setError((error as Error).message));
+
+        dispatch(setRequests(response.data.data));
+      } catch (error: any) {
+        dispatch(
+          setError(error.response?.data?.message || "Failed to fetch requests")
+        );
       } finally {
         dispatch(setLoading(false));
       }
@@ -44,43 +44,33 @@ export default function Requests() {
 
   const handleAccept = async (requestId: string) => {
     try {
-      const response = await fetch(
+      await axios.post(
         `${import.meta.env.VITE_API_URL}/request/review/accepted/${requestId}`,
-        {
-          method: "POST",
-          credentials: "include",
-        }
+        {},
+        { withCredentials: true }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to accept request");
-      }
-
-      dispatch(updateRequestStatus({ requestId, status: "accepted" }));
+      // Remove the request from the list immediately
+      dispatch(setRequests(requests.filter(request => request._id !== requestId)));
       toast.success("Connection request accepted!");
-    } catch (error) {
-      toast.error((error as Error).message);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to accept request");
     }
   };
 
   const handleReject = async (requestId: string) => {
     try {
-      const response = await fetch(
+      await axios.post(
         `${import.meta.env.VITE_API_URL}/request/review/rejected/${requestId}`,
-        {
-          method: "POST",
-          credentials: "include",
-        }
+        {},
+        { withCredentials: true }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to reject request");
-      }
-
-      dispatch(updateRequestStatus({ requestId, status: "rejected" }));
+      // Remove the request from the list immediately
+      dispatch(setRequests(requests.filter(request => request._id !== requestId)));
       toast.success("Connection request rejected");
-    } catch (error) {
-      toast.error((error as Error).message);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to reject request");
     }
   };
 

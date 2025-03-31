@@ -8,20 +8,14 @@ import {
   setCurrentPage,
   setHasMore,
 } from "../store/feedSlice";
-import UserCard from "../components/Card"; // Import the UserCard component
+import UserCard from "../components/Card";
 import { toast } from "react-hot-toast";
-import {
-  setFeedUsers,
-  removeFromFeed
-} from "../store/connectionsSlice";
+import axios from "axios";
 
 export default function Feed() {
   const dispatch = useDispatch();
   const { users, currentPage, hasMore, isLoading, error } = useSelector(
     (state: RootState) => state.feed
-  );
-  const { feedUsers } = useSelector(
-    (state: RootState) => state.connections
   );
 
   const fetchFeed = async (page: number) => {
@@ -55,27 +49,34 @@ export default function Feed() {
 
   const handleInterested = async (userId: string) => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/request/send/${userId}`,
-        {
-          method: "POST",
-          credentials: "include",
-        }
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/request/send/interested/${userId}`,
+        {},
+        { withCredentials: true }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to send connection request");
-      }
-
-      dispatch(removeFromFeed(userId));
+      // Remove user from the feed immediately
+      dispatch(setUsers(users.filter(user => user._id !== userId)));
       toast.success("Connection request sent!");
-    } catch (error) {
-      toast.error((error as Error).message);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to send connection request");
     }
   };
 
-  const handleIgnore = (userId: string) => {
-    dispatch(removeFromFeed(userId));
+  const handleIgnore = async (userId: string) => {
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/request/send/ignored/${userId}`,
+        {},
+        { withCredentials: true }
+      );
+
+      // Remove user from the feed immediately
+      dispatch(setUsers(users.filter(user => user._id !== userId)));
+      toast.success("User ignored");
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to ignore user");
+    }
   };
 
   useEffect(() => {
@@ -118,8 +119,8 @@ export default function Feed() {
               <UserCard
                 key={user._id}
                 user={user}
-                onInterested={handleInterested}
-                onIgnore={handleIgnore}
+                onInterested={() => handleInterested(user._id)}
+                onIgnore={() => handleIgnore(user._id)}
               />
             ))}
           </div>

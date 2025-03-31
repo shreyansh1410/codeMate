@@ -21,7 +21,6 @@ export interface ConnectionRequest {
 interface ConnectionsState {
   connections: RequestUser[];
   requests: ConnectionRequest[];
-  feedUsers: RequestUser[];
   isLoading: boolean;
   error: string | null;
 }
@@ -29,7 +28,6 @@ interface ConnectionsState {
 const initialState: ConnectionsState = {
   connections: [],
   requests: [],
-  feedUsers: [],
   isLoading: false,
   error: null,
 };
@@ -50,9 +48,6 @@ const connectionsSlice = createSlice({
     setRequests: (state, action: PayloadAction<ConnectionRequest[]>) => {
       state.requests = action.payload;
     },
-    setFeedUsers: (state, action: PayloadAction<RequestUser[]>) => {
-      state.feedUsers = action.payload;
-    },
     updateRequestStatus: (
       state,
       action: PayloadAction<{ requestId: string; status: 'accepted' | 'rejected' }>
@@ -60,13 +55,7 @@ const connectionsSlice = createSlice({
       const request = state.requests.find((r) => r._id === action.payload.requestId);
       if (request) {
         request.status = action.payload.status;
-        if (action.payload.status === 'accepted') {
-          state.connections.push(request.fromUserId);
-        }
       }
-    },
-    removeFromFeed: (state, action: PayloadAction<string>) => {
-      state.feedUsers = state.feedUsers.filter((user: RequestUser) => user._id !== action.payload);
     },
   },
 });
@@ -76,8 +65,6 @@ export const {
   setError, 
   setConnections, 
   setRequests,
-  setFeedUsers,
-  updateRequestStatus,
-  removeFromFeed
+  updateRequestStatus
 } = connectionsSlice.actions;
-export default connectionsSlice.reducer; 
+export default connectionsSlice.reducer;
