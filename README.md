@@ -71,6 +71,8 @@
 
 - If the `location.hostname` is localhost, then Backend URL should be set to `localhost:5000` else `/api`
 
+- nginx 404 error : change the `location` filed in sudo nano /etc/nginx/sites-available/default to serve index.html if route not available
+
 # Sending Emails via SES
 
 - Create a IAM User
