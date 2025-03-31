@@ -7,7 +7,7 @@ import { getProfile } from "../api/auth";
 
 export default function Body() {
   const dispatch = useDispatch();
-  const { user, isLoading } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth);
   const [isInitialAuthCheckComplete, setIsInitialAuthCheckComplete] = useState(false);
 
   useEffect(() => {

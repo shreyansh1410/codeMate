@@ -13,3 +13,4 @@
   - check node version in local
   - install same version in cloud (22.13.0 in my case)
   - clone the backend and frontend repos
+  - deploy the frontend first
