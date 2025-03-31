@@ -8,6 +8,8 @@ import { toast } from "react-hot-toast";
 import UserCard from "../components/Card";
 import { VITE_API_URL } from "../utils/constants";
 
+const API_URL = VITE_API_URL;
+
 interface UpdateFormData {
   firstName: string;
   lastName: string;
@@ -33,7 +35,6 @@ export default function Profile() {
   });
   const [skillInput, setSkillInput] = useState("");
   const [error, setFormError] = useState<string | null>(null);
-  const API_URL = VITE_API_URL;
 
   useEffect(() => {
     if (user) {
@@ -97,7 +98,7 @@ export default function Profile() {
 
     try {
       dispatch(setLoading(true));
-      const response = await fetch(`{API_URL}/profile`, {
+      const response = await fetch(`${API_URL}/profile`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
