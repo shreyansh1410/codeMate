@@ -1,1 +1,2 @@
-export const VITE_API_URL = "http://3.108.220.117/api/api";
+export const VITE_API_URL =
+  location.hostname == "localhost" ? "http://localhost:5000/api" : "/api/api";
