@@ -49,11 +49,40 @@
   - nginx config :
     - server_name: 3.108.220.117
     - location /api/ {
-        - proxy_pass http://127.0.0.1:5000/;
-        - proxy_set_header Host $host;
-        - proxy_set_header X-Real-IP $remote_addr;
-        - proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        - proxy_set_header X-Forwarded-Proto $scheme;
+      - proxy_pass http://127.0.0.1:5000/;
+      - proxy_set_header Host $host;
+      - proxy_set_header X-Real-IP $remote_addr;
+      - proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      - proxy_set_header X-Forwarded-Proto $scheme;
     - }
   - Restart nginx using `sudo systemctl restart nginx`
   - Modify the Base URLs in the files to "/api"
+
+  ## Adding custom domain name
+
+  - Purchased from GoDaddy
+  - Signed up on Cloudflare
+  - Changed the nameservers
+  - Wait for nameserver updation
+  - Create DNS A record pointing to the AWS Instance's IP Address
+  - Enable SSL Security (Flexible)
+
+# Additionals
+
+- If the `location.hostname` is localhost, then Backend URL should be set to `localhost:5000` else `/api`
+
+# Sending Emails via SES
+
+- Create a IAM User
+- Give AmazonSESfullaccess to the user
+- Create an identity in Amazon SES
+- Verify domain name
+- Verfify email address
+- Install AWS SDK v3
+- Code Example: https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/javascriptv3/example_code/ses/src/ses_sendemail.js
+- Setup SES Client
+- Create secruity credentials from IAM to get the access key and secret key
+- Add credentials to env file
+- Write code for sesclient (sesClient.ts)
+- Write code for sending email (sendEmail.ts)
+- Make the email dynamic (the emails (from and to both) should be verified)
