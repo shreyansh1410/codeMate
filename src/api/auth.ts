@@ -1,6 +1,7 @@
 import type { User } from "../store/authSlice";
+import { VITE_API_URL } from "../utils/constants";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = VITE_API_URL;
 
 interface LoginData {
   emailId: string;
@@ -81,7 +82,7 @@ export const checkAuthStatus = async (): Promise<AuthResponse> => {
 };
 
 export const getProfile = async () => {
-  const response = await fetch("http://localhost:5000/api/profile", {
+  const response = await fetch(`${API_URL}/profile`, {
     method: "GET",
     credentials: "include",
     headers: {

@@ -1,50 +1,44 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { 
-  setLoading, 
-  setError, 
-  setConnections, 
+import {
+  setLoading,
+  setError,
+  setConnections,
   appendConnections,
   setConnectionsPage,
-  setConnectionsHasMore
+  setConnectionsHasMore,
 } from "../store/connectionsSlice";
 import UserCard from "../components/Card";
+import { VITE_API_URL } from "../utils/constants";
 
 export default function Connections() {
   const dispatch = useDispatch();
-  const { 
-    connections, 
-    isLoading, 
-    error, 
-    connectionsPage, 
-    connectionsHasMore 
-  } = useSelector(
-    (state: RootState) => state.connections
-  );
+  const { connections, isLoading, error, connectionsPage, connectionsHasMore } =
+    useSelector((state: RootState) => state.connections);
 
   const fetchConnections = async (page: number) => {
     try {
       dispatch(setLoading(true));
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/user/connections?page=${page}&limit=9`, 
+        `${VITE_API_URL}/user/connections?page=${page}&limit=9`,
         {
           credentials: "include",
         }
       );
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch connections");
       }
-      
+
       const data = await response.json();
-      
+
       if (page === 1) {
         dispatch(setConnections(data.data));
       } else {
         dispatch(appendConnections(data.data));
       }
-      
+
       // Check if there are more connections to load
       dispatch(setConnectionsHasMore(data.data.length === 9));
       dispatch(setConnectionsPage(page));

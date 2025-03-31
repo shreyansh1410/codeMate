@@ -6,6 +6,7 @@ import { logout } from "../api/auth";
 import type { RootState } from "../store/store";
 import { toast } from "react-hot-toast";
 import UserCard from "../components/Card";
+import { VITE_API_URL } from "../utils/constants";
 
 interface UpdateFormData {
   firstName: string;
@@ -32,6 +33,7 @@ export default function Profile() {
   });
   const [skillInput, setSkillInput] = useState("");
   const [error, setFormError] = useState<string | null>(null);
+  const API_URL = VITE_API_URL;
 
   useEffect(() => {
     if (user) {
@@ -95,7 +97,7 @@ export default function Profile() {
 
     try {
       dispatch(setLoading(true));
-      const response = await fetch("http://localhost:5000/api/profile", {
+      const response = await fetch(`{API_URL}/profile`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -124,13 +126,12 @@ export default function Profile() {
     <div className="min-h-screen bg-base-200 py-12 px-4 sm:px-6 lg:px-8 mt-10">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-center mb-8">Your Profile</h1>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-5 space-y-6 order-1 lg:order-2">
             {user && (
               <div className="h-96">
-                <UserCard 
+                <UserCard
                   user={{
                     _id: user._id || "preview",
                     firstName: formData.firstName,
@@ -139,7 +140,7 @@ export default function Profile() {
                     photoURL: formData.photoURL,
                     skills: formData.skills,
                     age: formData.age ? Number(formData.age) : undefined,
-                    gender: formData.gender
+                    gender: formData.gender,
                   }}
                   onInterested={handleInterested}
                   onIgnore={handleIgnore}
@@ -150,15 +151,17 @@ export default function Profile() {
 
             <div className="card bg-base-100 shadow-xl">
               <div className="card-body">
-                <h3 className="text-lg font-semibold mb-2 card-title">Account Information</h3>
+                <h3 className="text-lg font-semibold mb-2 card-title">
+                  Account Information
+                </h3>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <span className="text-primary">Email:</span>
                     <span>{user?.emailId}</span>
                   </div>
-                  
+
                   <div className="divider"></div>
-                  
+
                   <button
                     onClick={handleLogout}
                     className="btn btn-outline btn-error w-full"
@@ -180,20 +183,32 @@ export default function Profile() {
               <div className="p-6 border-b border-base-300">
                 <h2 className="text-xl font-semibold">Edit Profile</h2>
               </div>
-              
+
               <div className="p-6">
                 {error && (
                   <div className="alert alert-error mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="stroke-current shrink-0 h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     <span>{error}</span>
                   </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <h3 className="font-medium text-base-content/70 text-sm uppercase tracking-wider">Personal Information</h3>
-                  
+                  <h3 className="font-medium text-base-content/70 text-sm uppercase tracking-wider">
+                    Personal Information
+                  </h3>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="form-control">
                       <label className="label">
@@ -204,7 +219,10 @@ export default function Profile() {
                         className="input input-bordered focus:input-primary"
                         value={formData.firstName}
                         onChange={(e) =>
-                          setFormData({ ...formData, firstName: e.target.value })
+                          setFormData({
+                            ...formData,
+                            firstName: e.target.value,
+                          })
                         }
                         required
                       />
@@ -259,17 +277,21 @@ export default function Profile() {
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                         <option value="others">Others</option>
-                        <option value="prefer not to say">Prefer Not To Say</option>
+                        <option value="prefer not to say">
+                          Prefer Not To Say
+                        </option>
                       </select>
                     </div>
                   </div>
 
                   <div className="divider"></div>
-                  <h3 className="font-medium text-base-content/70 text-sm uppercase tracking-wider">Profile Details</h3>
+                  <h3 className="font-medium text-base-content/70 text-sm uppercase tracking-wider">
+                    Profile Details
+                  </h3>
 
                   <div className="form-control w-full">
-                      <div className="label-text w-full">Profile Picture URL</div>
-     
+                    <div className="label-text w-full">Profile Picture URL</div>
+
                     <input
                       type="url"
                       className="input input-bordered focus:input-primary w-full"
@@ -282,24 +304,30 @@ export default function Profile() {
                   </div>
 
                   <div className="form-control">
-                      <div className="label-text">Bio</div>
-            
+                    <div className="label-text">Bio</div>
+
                     <textarea
                       className="textarea textarea-bordered h-24 focus:textarea-primary w-full"
                       value={formData.bio}
-                      onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, bio: e.target.value })
+                      }
                       placeholder="Tell us about yourself..."
                       maxLength={100}
                     />
                     <label className="label">
-                      <span className="label-text-alt">{formData.bio.length}/100 characters</span>
+                      <span className="label-text-alt">
+                        {formData.bio.length}/100 characters
+                      </span>
                     </label>
                   </div>
 
                   <div className="form-control">
                     <label className="label">
                       <span className="label-text">Skills</span>
-                      <span className="label-text-alt text-primary">First 3 shown on your card</span>
+                      <span className="label-text-alt text-primary">
+                        First 3 shown on your card
+                      </span>
                     </label>
                     <div className="flex gap-2">
                       <input

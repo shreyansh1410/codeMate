@@ -7,29 +7,23 @@ import {
   setRequests,
   appendRequests,
   setRequestsPage,
-  setRequestsHasMore
+  setRequestsHasMore,
 } from "../store/connectionsSlice";
 import RequestCard from "../components/RequestCard";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { VITE_API_URL } from "../utils/constants";
 
 export default function Requests() {
   const dispatch = useDispatch();
-  const { 
-    requests, 
-    isLoading, 
-    error, 
-    requestsPage, 
-    requestsHasMore 
-  } = useSelector(
-    (state: RootState) => state.connections
-  );
+  const { requests, isLoading, error, requestsPage, requestsHasMore } =
+    useSelector((state: RootState) => state.connections);
 
   const fetchRequests = async (page: number) => {
     try {
       dispatch(setLoading(true));
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/user/requests/received?page=${page}&limit=9`,
+        `${VITE_API_URL}/user/requests/received?page=${page}&limit=9`,
         { withCredentials: true }
       );
 
@@ -68,13 +62,15 @@ export default function Requests() {
   const handleAccept = async (requestId: string) => {
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/request/review/accepted/${requestId}`,
+        `${VITE_API_URL}/request/review/accepted/${requestId}`,
         {},
         { withCredentials: true }
       );
 
       // Remove the request from the list immediately
-      dispatch(setRequests(requests.filter(request => request._id !== requestId)));
+      dispatch(
+        setRequests(requests.filter((request) => request._id !== requestId))
+      );
       toast.success("Connection request accepted!");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to accept request");
@@ -84,13 +80,15 @@ export default function Requests() {
   const handleReject = async (requestId: string) => {
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/request/review/rejected/${requestId}`,
+        `${VITE_API_URL}/request/review/rejected/${requestId}`,
         {},
         { withCredentials: true }
       );
 
       // Remove the request from the list immediately
-      dispatch(setRequests(requests.filter(request => request._id !== requestId)));
+      dispatch(
+        setRequests(requests.filter((request) => request._id !== requestId))
+      );
       toast.success("Connection request rejected");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to reject request");
