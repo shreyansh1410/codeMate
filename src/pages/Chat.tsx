@@ -57,6 +57,7 @@ const Chat = () => {
     if (!user) return;
     const socket = createSocketConnection();
     socket.emit("sendMessage", {sendingUser: user.firstName + " " + user.lastName, text: newMessage, userId, targetUserId });
+    setNewMessage("");
   }
 
   return (

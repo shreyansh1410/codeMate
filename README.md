@@ -127,3 +127,10 @@
 -
 -
 - Listen to the message receive even in client
+-
+-
+-
+-
+-
+- To secure the room id, either use crypto package to create an encoded string
+- Or use auth provided by socket.io (Read in docs)
