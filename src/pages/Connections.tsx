@@ -9,13 +9,23 @@ import {
   setConnectionsPage,
   setConnectionsHasMore,
 } from "../store/connectionsSlice";
-import UserCard from "../components/Card";
+import UserCard from "../components/UserCard";
 import { VITE_API_URL } from "../utils/constants";
+import { ConnectionUser } from "../store/types";
 
 export default function Connections() {
   const dispatch = useDispatch();
   const { connections, isLoading, error, connectionsPage, connectionsHasMore } =
     useSelector((state: RootState) => state.connections);
+
+  const adaptedConnections: ConnectionUser[] = connections.map((user) => ({
+    _id: user._id,
+    name: `${user.firstName} ${user.lastName}`,
+    email: "",
+    profilePicture: user.photoURL,
+    bio: user.bio,
+    skills: user.skills,
+  }));
 
   const fetchConnections = async (page: number) => {
     try {
@@ -39,7 +49,6 @@ export default function Connections() {
         dispatch(appendConnections(data.data));
       }
 
-      // Check if there are more connections to load
       dispatch(setConnectionsHasMore(data.data.length === 9));
       dispatch(setConnectionsPage(page));
     } catch (error) {
@@ -83,7 +92,7 @@ export default function Connections() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {connections.map((user) => (
+            {adaptedConnections.map((user) => (
               <UserCard
                 key={user._id}
                 user={user}

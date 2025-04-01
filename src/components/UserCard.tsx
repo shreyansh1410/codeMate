@@ -1,12 +1,20 @@
 import { ConnectionUser } from "../store/types";
+import { useNavigate } from "react-router-dom";
 
 interface UserCardProps {
   user: ConnectionUser;
   onInterested: () => void;
   onIgnore: () => void;
+  showActions?: boolean;
 }
 
-export default function UserCard({ user, onInterested, onIgnore }: UserCardProps) {
+export default function UserCard({ user, onInterested, onIgnore, showActions = true }: UserCardProps) {
+  const navigate = useNavigate();
+
+  const handleChatClick = () => {
+    navigate(`/chat/${user._id}`);
+  };
+
   return (
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body">
@@ -41,14 +49,24 @@ export default function UserCard({ user, onInterested, onIgnore }: UserCardProps
           </div>
         </div>
         <div className="card-actions justify-end mt-4">
-          <button className="btn btn-error btn-sm" onClick={onIgnore}>
-            Ignore
+          <button className="btn btn-info btn-sm" onClick={handleChatClick}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            Chat
           </button>
-          <button className="btn btn-primary btn-sm" onClick={onInterested}>
-            Interested
-          </button>
+          {showActions && (
+            <>
+              <button className="btn btn-error btn-sm" onClick={onIgnore}>
+                Ignore
+              </button>
+              <button className="btn btn-primary btn-sm" onClick={onInterested}>
+                Interested
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
   );
-} 
+}

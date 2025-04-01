@@ -1,21 +1,25 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import { Provider } from "react-redux";
-import { store } from "./store/store";
-import { Toaster } from "react-hot-toast";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import Feed from "./pages/Feed";
 import Connections from "./pages/Connections";
 import Requests from "./pages/Requests";
+import Chat from "./pages/Chat";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
 import Testimonials from "./components/Testimonials";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Body from "./components/Body";
-import { useSelector } from "react-redux";
-import { RootState } from "./store/store";
+import { Provider, useSelector } from "react-redux";
+import { store, RootState } from "./store/store";
+import { Toaster } from "react-hot-toast";
 
 function LandingPage() {
   return (
@@ -28,12 +32,12 @@ function LandingPage() {
 
 function HomeRoute() {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
-  
+
   // If user is authenticated, redirect to feed page
   if (isAuthenticated) {
     return <Navigate to="/feed" replace />;
   }
-  
+
   // Otherwise show landing page
   return <LandingPage />;
 }
@@ -76,6 +80,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <Requests />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat/:targetUserId"
+            element={
+              <ProtectedRoute>
+                <Chat />
               </ProtectedRoute>
             }
           />

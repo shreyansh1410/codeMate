@@ -88,3 +88,42 @@
 - Write code for sesclient (sesClient.ts)
 - Write code for sending email (sendEmail.ts)
 - Make the email dynamic (the emails (from and to both) should be verified)
+ 
+# Scheduling Cron jobs
+
+- Install node-cron from npm
+- Create a cronjobs file
+- Go to https://crontab.guru to learn more
+- Use the date-fns package to work with dates
+- Find all the unique users who received requests yesterday
+- Explore queue mechanisms to send bulk mails
+- Amazon SES Bulk Emails
+- Send email function should be dynamic
+- BeeQueue, Bull: npm packages to implement queue in Node.js
+
+# Payment Gateway Integration
+
+- 
+
+
+# Realtime chat using Websockets (socket.io library)
+
+- Socket.IO is a library that enables low-latency, bidirectional and event-based communication between a client and a server.
+- Create chat page UI
+- Import server from hhtp module
+- Change app.listen to socket.listen
+- Pass this server to a separte file for scokets only (initializeSocket function)
+- import Server from socket.io module (npm i socket-io)
+- Create new Server with cors options in this socket.ts file in backend (initializeSocket function)
+- Setup frontend socket.io (npm i socket.io-client)
+- Create socket function in a separate file in frontend (createSocketFunction)
+- Create multiple events in the socket file in backend (joinChat, sendMessage, disconnect)
+- Create socket connection in useEffect (Backend)
+- Start emitting events from frontend (event name and the data to be sent with it)
+- NEVER leave the socket connections loose
+-
+-
+-
+-
+-
+- Listen to the message receive even in client
