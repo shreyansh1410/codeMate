@@ -6,24 +6,81 @@ import { RootState } from "../store/store";
 import axios from "axios";
 import { VITE_API_URL } from "../utils/constants";
 
-
 const Chat = () => {
   const { targetUserId } = useParams();
-  const [messages, setMessages] = useState<{sendingUser: string, text: string, userId: string, targetUserId: string, receivingUser: string}[]>([]);
+  const [messages, setMessages] = useState<
+    {
+      sendingUser: string;
+      text: string;
+      userId: string;
+      targetUserId: string;
+      receivingUser: string;
+    }[]
+  >([]);
   const [newMessage, setNewMessage] = useState("");
-  const [targetUser, setTargetUser] = useState<{ firstName: string; lastName: string } | null>(null);
+  const [targetUser, setTargetUser] = useState<{
+    firstName: string;
+    lastName: string;
+  } | null>(null);
   const { user } = useSelector((state: RootState) => state.auth);
-  
+
   const userId = user?._id;
-  
+
+  const fetchChatMessages = async () => {
+    try {
+      const response = await axios.get(`${VITE_API_URL}/chat/${targetUserId}`, {
+        withCredentials: true,
+      });
+
+      console.log("Chat API response:", response.data);
+
+      if (
+        !response.data ||
+        !response.data.messages ||
+        response.data.messages.length === 0
+      ) {
+        return;
+      }
+
+      const chatMessages = response.data.messages.map((msg: any) => {
+        const sender = msg.senderId || {};
+
+        return {
+          sendingUser: `${sender.firstName || ""} ${
+            sender.lastName || ""
+          }`.trim(),
+          text: msg.text || "",
+          userId: sender._id || "",
+          targetUserId: targetUserId || "",
+        };
+      });
+
+      console.log("Formatted messages:", chatMessages);
+      setMessages(chatMessages);
+    } catch (err) {
+      console.error("Error fetching chat messages:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (userId && targetUserId) {
+      fetchChatMessages();
+    }
+  }, [userId, targetUserId]);
+
   useEffect(() => {
     if (!userId || !targetUserId) {
-      console.log("Missing userId or targetUserId, not connecting socket", { userId, targetUserId });
+      console.log("Missing userId or targetUserId, not connecting socket", {
+        userId,
+        targetUserId,
+      });
       return;
     }
 
     const getTargetUserData = async () => {
-      const targetUser = await axios.get(`${VITE_API_URL}/profile/${targetUserId}`);
+      const targetUser = await axios.get(
+        `${VITE_API_URL}/profile/${targetUserId}`
+      );
       const { firstName, lastName } = targetUser.data;
       console.log("Target user data:", { firstName, lastName });
       setTargetUser({ firstName, lastName });
@@ -34,16 +91,38 @@ const Chat = () => {
     const socket = createSocketConnection();
     const sendingUser = user?.firstName + " " + user?.lastName;
     const receivingUser = targetUser?.firstName + " " + targetUser?.lastName;
-    console.log("Setting up socket connection with user: ", sendingUser, " and targetUser:", receivingUser);
-    socket.emit("joinChat", { sendingUser, userId, targetUserId, receivingUser });
-
-    socket.on("receiveMessage", ({sendingUser,
-      text,
+    console.log(
+      "Setting up socket connection with user: ",
+      sendingUser,
+      " and targetUser:",
+      receivingUser
+    );
+    socket.emit("joinChat", {
+      sendingUser,
       userId,
       targetUserId,
-      receivingUser}) => {
-      setMessages((prev: {sendingUser: string, text: string, userId: string, targetUserId: string, receivingUser: string}[]) => [...prev, {sendingUser, text, userId, targetUserId, receivingUser}]);
+      receivingUser,
     });
+
+    socket.on(
+      "receiveMessage",
+      ({ sendingUser, text, userId, targetUserId, receivingUser }) => {
+        setMessages(
+          (
+            prev: {
+              sendingUser: string;
+              text: string;
+              userId: string;
+              targetUserId: string;
+              receivingUser: string;
+            }[]
+          ) => [
+            ...prev,
+            { sendingUser, text, userId, targetUserId, receivingUser },
+          ]
+        );
+      }
+    );
 
     return () => {
       console.log("Cleaning up socket connection");
@@ -53,39 +132,66 @@ const Chat = () => {
     };
   }, [userId, targetUserId]);
 
-  const sendMessage = () =>{
+  const sendMessage = () => {
     if (!user) return;
     const socket = createSocketConnection();
-    socket.emit("sendMessage", {sendingUser: user.firstName + " " + user.lastName, text: newMessage, userId, targetUserId });
+    socket.emit("sendMessage", {
+      sendingUser: user.firstName + " " + user.lastName,
+      text: newMessage,
+      userId,
+      targetUserId,
+    });
     setNewMessage("");
-  }
+  };
 
   return (
     <div className="w-3/4 mx-auto border border-gray-600 m-5 h-[70vh] flex flex-col mt-20">
-      <h1 className="p-5 border-b border-gray-600">Chat with {targetUser?.firstName + " " + targetUser?.lastName}</h1>
+      <h1 className="p-5 border-b border-gray-600">
+        Chat with {targetUser?.firstName + " " + targetUser?.lastName}
+      </h1>
       <div className="flex-1 overflow-scroll p-5">
         {messages.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-base-content/70">No messages yet. Start the conversation!</p>
+            <p className="text-base-content/70">
+              No messages yet. Start the conversation!
+            </p>
           </div>
         ) : (
-          messages.map((msg: { sendingUser: string; text: string; userId: string; targetUserId: string; receivingUser: string }, index) => {
-            return (
-              <div
-                key={index}
-                className={
-                  "chat " + (msg.sendingUser === user?.firstName + " " + user?.lastName ? "chat-end" : "chat-start")
-                }
-              >
-                <div className="chat-header">
-                  {`${msg.sendingUser === user?.firstName + " " + user?.lastName ? "You" : msg.sendingUser}`}
-                  <time className="text-xs opacity-50"> just now</time>
+          messages.map(
+            (
+              msg: {
+                sendingUser: string;
+                text: string;
+                userId: string;
+                targetUserId: string;
+                receivingUser: string;
+              },
+              index
+            ) => {
+              return (
+                <div
+                  key={index}
+                  className={
+                    "chat " +
+                    (msg.sendingUser === user?.firstName + " " + user?.lastName
+                      ? "chat-end"
+                      : "chat-start")
+                  }
+                >
+                  <div className="chat-header">
+                    {`${
+                      msg.sendingUser === user?.firstName + " " + user?.lastName
+                        ? "You"
+                        : msg.sendingUser
+                    }`}
+                    <time className="text-xs opacity-50"> just now</time>
+                  </div>
+                  <div className="chat-bubble">{msg.text}</div>
+                  <div className="chat-footer opacity-50">Sent</div>
                 </div>
-                <div className="chat-bubble">{msg.text}</div>
-                <div className="chat-footer opacity-50">Sent</div>
-              </div>
-            );
-          })
+              );
+            }
+          )
         )}
       </div>
       <div className="p-5 border-t border-gray-600 flex items-center gap-2">
@@ -95,7 +201,12 @@ const Chat = () => {
           className="flex-1 border border-gray-500 text-white rounded p-2"
           placeholder="Type your message..."
         ></input>
-        <button onClick={() => {sendMessage()}} className="btn btn-secondary">
+        <button
+          onClick={() => {
+            sendMessage();
+          }}
+          className="btn btn-secondary"
+        >
           Send
         </button>
       </div>

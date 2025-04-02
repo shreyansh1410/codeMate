@@ -134,3 +134,11 @@
 -
 - To secure the room id, either use crypto package to create an encoded string
 - Or use auth provided by socket.io (Read in docs)
+
+## Storing chats in DB
+
+- Create a new Schema for Chats
+- Attributes for participatns and messages
+- Messages itself will be a schema
+- Message attributes are senderId and the text
+- Text is string and senderId of mongoose object id type that refers to User
