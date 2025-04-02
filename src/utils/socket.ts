@@ -2,9 +2,10 @@ import { io } from "socket.io-client";
 
 export const createSocketConnection = () => {
   // For localhost development
-  const baseUrl = location.hostname === "localhost" 
-    ? "http://localhost:5000" 
-    : "/api"; // Relative path for production
+  const baseUrl =
+    location.hostname === "localhost"
+      ? "http://localhost:5000"
+      : "https://codemate.diy/api"; // Relative path for production
 
   console.log("Creating socket connection to base URL:", baseUrl);
 
