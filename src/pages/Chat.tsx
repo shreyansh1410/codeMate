@@ -32,9 +32,6 @@ const Chat = () => {
       const response = await axios.get(`${VITE_API_URL}/chat/${targetUserId}`, {
         withCredentials: true,
       });
-
-      console.log("Chat API response:", response.data);
-
       if (
         !response.data ||
         !response.data.messages ||
@@ -56,8 +53,6 @@ const Chat = () => {
           targetUserId: targetUserId || "",
         };
       });
-
-      console.log("Formatted messages:", chatMessages);
       setMessages(chatMessages);
     } catch (err: any) {
       console.error("Error fetching chat messages:", err);
@@ -79,10 +74,6 @@ const Chat = () => {
 
   useEffect(() => {
     if (!userId || !targetUserId) {
-      console.log("Missing userId or targetUserId, not connecting socket", {
-        userId,
-        targetUserId,
-      });
       return;
     }
 
@@ -91,7 +82,6 @@ const Chat = () => {
         `${VITE_API_URL}/profile/${targetUserId}`
       );
       const { firstName, lastName } = targetUser.data;
-      console.log("Target user data:", { firstName, lastName });
       setTargetUser({ firstName, lastName });
     };
 
@@ -100,12 +90,6 @@ const Chat = () => {
     const socket = createSocketConnection();
     const sendingUser = user?.firstName + " " + user?.lastName;
     const receivingUser = targetUser?.firstName + " " + targetUser?.lastName;
-    console.log(
-      "Setting up socket connection with user: ",
-      sendingUser,
-      " and targetUser:",
-      receivingUser
-    );
     socket.emit("joinChat", {
       sendingUser,
       userId,
@@ -146,7 +130,6 @@ const Chat = () => {
     );
 
     return () => {
-      console.log("Cleaning up socket connection");
       if (socket) {
         socket.disconnect();
       }

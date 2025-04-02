@@ -83,7 +83,6 @@ export default function Profile() {
     });
   };
 
-  // Mock functions for the UserCard component - these won't be used when showActions is false
   const handleInterested = (userId: string) => {
     console.log("Interested in user:", userId);
   };
