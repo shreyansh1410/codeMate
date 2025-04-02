@@ -7,7 +7,7 @@ export const createSocketConnection = () => {
   const baseUrl =
     location.hostname === "localhost"
       ? VITE_API_URL.replace(/\/api$/, "")
-      : "https:codemate.diy/api";
+      : "https://codemate.diy/api";
 
   console.log("Creating socket connection to base URL:", baseUrl);
 
