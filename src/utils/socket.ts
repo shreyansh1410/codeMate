@@ -5,11 +5,12 @@ export const createSocketConnection = () => {
   const baseUrl =
     location.hostname === "localhost"
       ? "http://localhost:5000"
-      : "https://codemate.diy/api"; // Relative path for production
+      : "https://codemate.diy"; // Base URL without /api
 
   console.log("Creating socket connection to base URL:", baseUrl);
 
   const socket = io(baseUrl, {
+    path: "/api/socket.io", // Specify the correct path
     withCredentials: true,
     transports: ["websocket", "polling"],
   });
