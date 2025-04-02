@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
@@ -8,6 +8,7 @@ import { VITE_API_URL } from "../utils/constants";
 
 const Chat = () => {
   const { targetUserId } = useParams();
+  const navigate = useNavigate();
   const [messages, setMessages] = useState<
     {
       sendingUser: string;
@@ -37,6 +38,7 @@ const Chat = () => {
       if (
         !response.data ||
         !response.data.messages ||
+        response.data.length === 0 ||
         response.data.messages.length === 0
       ) {
         return;
@@ -57,8 +59,15 @@ const Chat = () => {
 
       console.log("Formatted messages:", chatMessages);
       setMessages(chatMessages);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error fetching chat messages:", err);
+      if (err.response && err.response.status === 401) {
+        // Show alert with the error message
+        alert(err.response.data.message || "You cannot chat with this user.");
+
+        // Redirect to connections page
+        navigate("/connections");
+      }
     }
   };
 
@@ -106,7 +115,19 @@ const Chat = () => {
 
     socket.on(
       "receiveMessage",
-      ({ sendingUser, text, userId, targetUserId, receivingUser }) => {
+      ({
+        sendingUser,
+        text,
+        userId,
+        targetUserId,
+        receivingUser,
+      }: {
+        sendingUser: string;
+        text: string;
+        userId: string;
+        targetUserId: string;
+        receivingUser: string;
+      }) => {
         setMessages(
           (
             prev: {
