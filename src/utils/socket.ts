@@ -1,13 +1,10 @@
 import { io } from "socket.io-client";
-import { VITE_API_URL } from "./constants";
 
 export const createSocketConnection = () => {
-  // For development: uses http://localhost:5000 (removes /api)
-  // For production: keeps http://3.108.220.117/api intact
-  const baseUrl =
-    location.hostname === "localhost"
-      ? VITE_API_URL.replace(/\/api$/, "")
-      : "https://codemate.diy/api";
+  // For localhost development
+  const baseUrl = location.hostname === "localhost" 
+    ? "http://localhost:5000" 
+    : "/api"; // Relative path for production
 
   console.log("Creating socket connection to base URL:", baseUrl);
 
