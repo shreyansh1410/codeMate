@@ -8,7 +8,7 @@ import type { RootState } from "../store/store";
 
 export default function SignIn() {
   const [emailId, setEmailId] = useState("joe@gmail.com");
-  const [password, setPassword] = useState("yourpassword");
+  const [password, setPassword] = useState("Yourpassword1.");
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
