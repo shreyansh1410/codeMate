@@ -6,17 +6,21 @@ declare global {
 
 import axios from "axios";
 import { VITE_API_URL } from "../utils/constants";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Premium = () => {
-    const [isPremium, setIsPremium] = useState(false);
+  const [isPremium, setIsPremium] = useState(false);
+
+  useEffect(() => {
+    verifyPremium();
+  });
   const verifyPremium = async () => {
     try {
       const response = await axios.get(`${VITE_API_URL}/payment/verify`, {
         withCredentials: true,
       });
       console.log("Payment API response:", response.data);
-      if(response.data.isPremium) {
+      if (response.data.isPremium) {
         setIsPremium(true);
         window.location.href = "/connections";
       }
@@ -72,8 +76,10 @@ const Premium = () => {
     }
   };
 
-  return (
-    isPremium?  <div>You are already a premium member</div> : <div className="m-10 mt-20">
+  return isPremium ? (
+    <div>You are already a premium member</div>
+  ) : (
+    <div className="m-10 mt-20">
       <div className="flex w-full">
         <div className="card bg-base-300 rounded-box grid h-80 flex-grow place-items-center">
           <h1 className="font-bold text-3xl">Silver Membership</h1>
