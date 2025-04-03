@@ -1,4 +1,5 @@
 import { Code2, Github, Linkedin } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -20,19 +21,28 @@ const Footer = () => {
             <h3 className="text-sm font-semibold mb-4">Product</h3>
             <ul className="space-y-2">
               <li>
-                <a className="text-sm text-base-content/60 hover:text-primary transition-colors">
+                <Link
+                  to="/"
+                  className="text-sm text-base-content/60 hover:text-primary transition-colors"
+                >
                   Features
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="text-sm text-base-content/60 hover:text-primary transition-colors">
+                <Link
+                  to="/"
+                  className="text-sm text-base-content/60 hover:text-primary transition-colors"
+                >
                   Teams
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="text-sm text-base-content/60 hover:text-primary transition-colors">
+                <Link
+                  to="/"
+                  className="text-sm text-base-content/60 hover:text-primary transition-colors"
+                >
                   Projects
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -41,19 +51,28 @@ const Footer = () => {
             <h3 className="text-sm font-semibold mb-4">Resources</h3>
             <ul className="space-y-2">
               <li>
-                <a className="text-sm text-base-content/60 hover:text-primary transition-colors">
+                <Link
+                  to="/"
+                  className="text-sm text-base-content/60 hover:text-primary transition-colors"
+                >
                   Documentation
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="text-sm text-base-content/60 hover:text-primary transition-colors">
+                <Link
+                  to="/"
+                  className="text-sm text-base-content/60 hover:text-primary transition-colors"
+                >
                   API
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="text-sm text-base-content/60 hover:text-primary transition-colors">
+                <Link
+                  to="/"
+                  className="text-sm text-base-content/60 hover:text-primary transition-colors"
+                >
                   Community
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -62,19 +81,28 @@ const Footer = () => {
             <h3 className="text-sm font-semibold mb-4">Company</h3>
             <ul className="space-y-2">
               <li>
-                <a className="text-sm text-base-content/60 hover:text-primary transition-colors">
+                <Link
+                  to="/"
+                  className="text-sm text-base-content/60 hover:text-primary transition-colors"
+                >
                   About
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="text-sm text-base-content/60 hover:text-primary transition-colors">
+                <Link
+                  to="/"
+                  className="text-sm text-base-content/60 hover:text-primary transition-colors"
+                >
                   Blog
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="text-sm text-base-content/60 hover:text-primary transition-colors">
+                <Link
+                  to="/"
+                  className="text-sm text-base-content/60 hover:text-primary transition-colors"
+                >
                   Careers
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -83,19 +111,28 @@ const Footer = () => {
             <h3 className="text-sm font-semibold mb-4">Legal</h3>
             <ul className="space-y-2">
               <li>
-                <a className="text-sm text-base-content/60 hover:text-primary transition-colors">
+                <Link
+                  to="/privacy"
+                  className="text-sm text-base-content/60 hover:text-primary transition-colors"
+                >
                   Privacy
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="text-sm text-base-content/60 hover:text-primary transition-colors">
+                <Link
+                  to="/terms"
+                  className="text-sm text-base-content/60 hover:text-primary transition-colors"
+                >
                   Terms
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="text-sm text-base-content/60 hover:text-primary transition-colors">
+                <Link
+                  to="/guidelines"
+                  className="text-sm text-base-content/60 hover:text-primary transition-colors"
+                >
                   Guidelines
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

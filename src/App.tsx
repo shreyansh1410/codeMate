@@ -11,12 +11,16 @@ import Feed from "./pages/Feed";
 import Connections from "./pages/Connections";
 import Requests from "./pages/Requests";
 import Chat from "./pages/Chat";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Guidelines from "./pages/Guidelines";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
 import Testimonials from "./components/Testimonials";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Body from "./components/Body";
+import ScrollToTop from "./components/ScrollToTop";
 import { Provider, useSelector } from "react-redux";
 import { store, RootState } from "./store/store";
 import { Toaster } from "react-hot-toast";
@@ -45,6 +49,7 @@ function HomeRoute() {
 function AppContent() {
   return (
     <div className="min-h-screen bg-base-100">
+      <ScrollToTop />
       <Navbar />
       <Routes>
         <Route element={<Body />}>
@@ -91,6 +96,10 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
+          {/* Legal pages */}
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/guidelines" element={<Guidelines />} />
         </Route>
       </Routes>
       <Footer />
