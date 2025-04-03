@@ -40,7 +40,16 @@ const Navbar = () => {
 
         <div className="flex items-center gap-4">
           {isAuthenticated ? (
-            <div className="relative">
+            <div className="relative flex">
+              <div>
+                <Link
+                  to="/premium"
+                  className="block px-4 py-2 hover:bg-base-300 transition-colors"
+                  onClick={() => setIsDropdownOpen(false)}
+                >
+                  Buy Premium ⭐
+                </Link>
+              </div>
               <button
                 className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary hover:border-primary/80 transition-colors focus:outline-none"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}

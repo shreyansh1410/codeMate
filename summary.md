@@ -103,7 +103,17 @@
 
 # Payment Gateway Integration
 
-- 
+- Sign up, complete KYC and get the secret key
+- Creat UI for premium page
+- Install razorpay dependecy 
+- Create API to creating orders in backend
+- Return JSON response and test in Postman
+- Create schema to store the payment information and store it while making API call
+- Store userid, orderid, amount, currency, status, notes, receipt
+- From frontend make API call to this route
+- Pass the membership type ONLY (not safe otherwise)
+- From backend verify the price for the membership type provided using a constants file
+- Open the Razorpay dialog box on clicking buy
 
 
 # Realtime chat using Websockets (socket.io library)
@@ -142,3 +152,4 @@
 - Messages itself will be a schema
 - Message attributes are senderId and the text
 - Text is string and senderId of mongoose object id type that refers to User
+- Setup Razorpay webhook on the live API

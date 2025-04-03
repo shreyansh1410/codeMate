@@ -160,6 +160,7 @@ const Footer = () => {
             >
               <Linkedin className="h-5 w-5 text-base-content/60 hover:text-primary" />
             </a>
+            <a href=""></a>
           </div>
         </div>
       </div>

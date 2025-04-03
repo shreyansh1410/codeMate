@@ -115,7 +115,7 @@ const Guidelines = () => {
             violations, please contact us at:
           </p>
           <p className="mt-2">
-            <strong>Email:</strong> shryeansh.14010@gmail.com
+            <strong>Email:</strong> shreyanshshukla@codemate.diy
             <br />
           </p>
         </div>

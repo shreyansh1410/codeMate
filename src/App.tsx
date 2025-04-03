@@ -14,6 +14,7 @@ import Chat from "./pages/Chat";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Guidelines from "./pages/Guidelines";
+import Premium from "./pages/Premium";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
@@ -96,7 +97,14 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
-          {/* Legal pages */}
+          <Route
+            path="/premium"
+            element={
+              <ProtectedRoute>
+                <Premium />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/guidelines" element={<Guidelines />} />
