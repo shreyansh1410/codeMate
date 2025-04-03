@@ -22,7 +22,7 @@ const Premium = () => {
       console.log("Payment API response:", response.data);
       if (response.data.isPremium) {
         setIsPremium(true);
-        window.location.href = "/connections";
+        alert("You are already a premium user!");
       }
     } catch (error) {
       console.error("Error verifying payment:", error);
@@ -37,13 +37,10 @@ const Premium = () => {
         { withCredentials: true }
       );
 
-      // Log the response to see its structure for debugging
       console.log("Payment API response:", response.data);
 
-      // Get data from the correct location in the response
       const { orderId, keyId, amount, currency, notes } = response.data;
 
-      // Make sure we have all required fields
       if (!orderId || !keyId) {
         console.error("Missing required payment information", response.data);
         return;
@@ -67,12 +64,10 @@ const Premium = () => {
         handler: verifyPremium(),
       };
 
-      // Create Razorpay instance and open the dialog
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (error) {
       console.error("Error creating payment:", error);
-      // You could add user-friendly error handling here
     }
   };
 
