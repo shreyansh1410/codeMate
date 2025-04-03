@@ -6,8 +6,25 @@ declare global {
 
 import axios from "axios";
 import { VITE_API_URL } from "../utils/constants";
+import { useState } from "react";
 
 const Premium = () => {
+    const [isPremium, setIsPremium] = useState(false);
+  const verifyPremium = async () => {
+    try {
+      const response = await axios.get(`${VITE_API_URL}/payment/verify`, {
+        withCredentials: true,
+      });
+      console.log("Payment API response:", response.data);
+      if(response.data.isPremium) {
+        setIsPremium(true);
+        window.location.href = "/connections";
+      }
+    } catch (error) {
+      console.error("Error verifying payment:", error);
+    }
+  };
+
   const handleBuyClick = async (type: String) => {
     try {
       const response = await axios.post(
@@ -43,6 +60,7 @@ const Premium = () => {
           email: notes && notes.emailId ? notes.emailId : "",
         },
         theme: { color: "#3399cc" },
+        handler: verifyPremium(),
       };
 
       // Create Razorpay instance and open the dialog
@@ -55,7 +73,7 @@ const Premium = () => {
   };
 
   return (
-    <div className="m-10 mt-20">
+    isPremium?  <div>You are already a premium member</div> : <div className="m-10 mt-20">
       <div className="flex w-full">
         <div className="card bg-base-300 rounded-box grid h-80 flex-grow place-items-center">
           <h1 className="font-bold text-3xl">Silver Membership</h1>
