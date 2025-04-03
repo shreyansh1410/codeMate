@@ -38,12 +38,10 @@ function LandingPage() {
 function HomeRoute() {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
-  // If user is authenticated, redirect to feed page
   if (isAuthenticated) {
     return <Navigate to="/feed" replace />;
   }
 
-  // Otherwise show landing page
   return <LandingPage />;
 }
 
