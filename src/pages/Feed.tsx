@@ -89,20 +89,7 @@ export default function Feed() {
     <div className="min-h-screen pt-16 p-4 bg-base-200 mt-10">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">Find Your CodeMate</h1>
-
-          {/* <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-circle btn-ghost">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-              </svg>
-            </div>
-            <ul tabIndex={0} className="dropdown-content z-30 menu p-2 shadow bg-base-100 rounded-box w-52">
-              <li><a>Filter by Skills</a></li>
-              <li><a>Sort by Most Recent</a></li>
-              <li><a>Reset Filters</a></li>
-            </ul>
-          </div> */}
+          <h1 className="text-3xl font-bold ml-4">Find Your CodeMate</h1>
         </div>
 
         {isLoading ? (

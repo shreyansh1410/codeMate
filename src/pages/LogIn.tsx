@@ -6,7 +6,7 @@ import { setLoading, setUser, setError } from "../store/authSlice";
 import { login } from "../api/auth";
 import type { RootState } from "../store/store";
 
-export default function SignIn() {
+export default function Login() {
   const [emailId, setEmailId] = useState("joe@gmail.com");
   const [password, setPassword] = useState("Yourpassword1.");
   const [showPassword, setShowPassword] = useState(false);

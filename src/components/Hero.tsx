@@ -1,4 +1,5 @@
 import { ArrowRight, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -7,7 +8,7 @@ const Hero = () => {
 
       <div className="content-container relative z-10">
         <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex mb-4">
+          <div className="hidden md:inline-flex mb-4">
             <p className="text-4xl font-medium text-primary animate-typing">
               The{" "}
               <span className="font-['Instrument_Serif'] font-style: italic font-light">
@@ -28,14 +29,18 @@ const Hero = () => {
           </p>
 
           <div className="flex items-center justify-center gap-4">
-            <button className="btn btn-primary gap-2 group">
-              Get Started
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button className="btn btn-ghost gap-2">
-              Learn more
-              <Sparkles className="w-4 h-4" />
-            </button>
+            <Link to="/register">
+              <button className="btn btn-primary gap-2 group">
+                Register Now
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </Link>
+            <Link to="/login">
+              <button className="btn btn-ghost gap-2">
+                Log In 
+                <Sparkles className="w-4 h-4" />
+              </button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-3 gap-8 mt-16 text-center">

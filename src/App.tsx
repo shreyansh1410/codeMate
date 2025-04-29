@@ -4,7 +4,7 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import SignIn from "./pages/SignIn";
+import SignIn from "./pages/LogIn";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import Feed from "./pages/Feed";

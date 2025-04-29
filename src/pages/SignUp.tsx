@@ -217,7 +217,7 @@ export default function SignUp() {
 
           <p className="text-center">
             Already have an account?{" "}
-            <Link to="/signin" className="link link-primary">
+            <Link to="/login" className="link link-primary">
               Sign In
             </Link>
           </p>
