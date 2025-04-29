@@ -61,9 +61,9 @@ const Navbar = () => {
             <span className="font-medium">CodeMate</span>
           </Link>
 
-          {isMobile && (
-              <div className="flex items-center justify-center">
-                <ThemeToggle />
+          {isMobile ? (
+            <div className="flex items-center justify-center">
+              <ThemeToggle />
               {!isPublicPage && (
                 <button
                   className="p-2 focus:outline-none"
@@ -91,9 +91,7 @@ const Navbar = () => {
                 </button>
               )}
             </div>
-          )}
-
-          {!isMobile && (
+          ) : (
             <div className="flex items-center gap-4">
               {isAuthenticated ? (
                 <div className="relative flex items-center">
@@ -177,6 +175,8 @@ const Navbar = () => {
         </div>
       </nav>
 
+      <div className="h-16 w-full bg-base-500 md:hidden"></div>
+
       {isMobile && !isPublicPage && (
         <div
           className={`fixed inset-0 z-40 transition-all duration-300 ${
@@ -189,11 +189,11 @@ const Navbar = () => {
           ></div>
 
           <div
-            className={`absolute top-10 right-0 h-full w-64 bg-base-200 shadow-xl transition-transform duration-300 transform ${
+            className={`absolute top-0 right-0 h-full w-64 bg-base-200 shadow-xl transition-transform duration-300 transform ${
               isSidebarOpen ? "translate-x-0" : "translate-x-full"
             }`}
           >
-            <div className="p-4 flex flex-col h-full">
+            <div className="p-4 pt-16 flex flex-col h-full">
               <div className="flex justify-between items-center mb-6"></div>
               {isAuthenticated ? (
                 <>
@@ -254,7 +254,7 @@ const Navbar = () => {
                       handleLogout();
                       closeSidebar();
                     }}
-                    className="mt-auto mb-10 p-3 text-error hover:bg-base-300 rounded-lg transition-colors"
+                    className="mt-auto p-3 text-error hover:bg-base-300 rounded-lg transition-colors"
                   >
                     Logout
                   </button>
